@@ -38,7 +38,7 @@ func netpollinit() {
 
 func netpollopen(fd uintptr, pd *pollDesc) int32 {
 	var ev epollevent
-	ev.events = _EPOLLIN | _EPOLLOUT | _EPOLLRDHUP | _EPOLLET
+	ev.events = _EPOLLIN | _EPOLLOUT /*| _EPOLLRDHUP */| _EPOLLET
 	*(**pollDesc)(unsafe.Pointer(&ev.data)) = pd
 	return -epollctl(epfd, _EPOLL_CTL_ADD, int32(fd), &ev)
 }

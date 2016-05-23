@@ -93,7 +93,11 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 	// About to call fork.
 	// No more allocation or calls of non-assembly functions.
 	runtime_BeforeFork()
-	r1, _, err1 = RawSyscall6(SYS_CLONE, uintptr(SIGCHLD)|sys.Cloneflags, 0, 0, 0, 0, 0)
+	r1, _, err1 = RawSyscall(SYS_FORK, 0, 0, 0)
+	if err1 == 38 {
+	// use vfork on esx
+		r1, _, err1 = RawSyscall(SYS_VFORK, 0, 0, 0)
+	}
 	if err1 != 0 {
 		runtime_AfterFork()
 		return 0, err1

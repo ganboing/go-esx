@@ -17,16 +17,22 @@ import "unsafe"
  * Wrapped
  */
 
+//sys	access(path string, mode uint32) (err error)
+
 func Access(path string, mode uint32) (err error) {
-	return Faccessat(_AT_FDCWD, path, mode, 0)
+	return access(path, mode)
 }
+
+//sys	chmod(path string, mode uint32) (err error)
 
 func Chmod(path string, mode uint32) (err error) {
-	return Fchmodat(_AT_FDCWD, path, mode, 0)
+	return chmod(path, mode)
 }
 
+//sys	chown(path string, uid int, gid int) (err error)
+
 func Chown(path string, uid int, gid int) (err error) {
-	return Fchownat(_AT_FDCWD, path, uid, gid, 0)
+	return chown(path, uid, gid)
 }
 
 func Creat(path string, mode uint32) (fd int, err error) {
@@ -34,21 +40,28 @@ func Creat(path string, mode uint32) (fd int, err error) {
 }
 
 //sys	linkat(olddirfd int, oldpath string, newdirfd int, newpath string, flags int) (err error)
+//sys	link(oldpath string, newpath string) (err error)
 
 func Link(oldpath string, newpath string) (err error) {
-	return linkat(_AT_FDCWD, oldpath, _AT_FDCWD, newpath, 0)
+	return link(oldpath, newpath)
 }
+
+//sys	mkdir(path string, mode uint32) (err error)
 
 func Mkdir(path string, mode uint32) (err error) {
-	return Mkdirat(_AT_FDCWD, path, mode)
+	return mkdir(path, mode)
 }
+
+//sys	mknod(path string, mode uint32, dev int) (err error)
 
 func Mknod(path string, mode uint32, dev int) (err error) {
-	return Mknodat(_AT_FDCWD, path, mode, dev)
+	return mknod(path, mode, dev)
 }
 
+//sys	open(path string, flags int, mode uint32) (fd int, err error)
+
 func Open(path string, mode int, perm uint32) (fd int, err error) {
-	return openat(_AT_FDCWD, path, mode|O_LARGEFILE, perm)
+	return open(path, mode|O_LARGEFILE, perm)
 }
 
 //sys	openat(dirfd int, path string, flags int, mode uint32) (fd int, err error)
@@ -58,30 +71,37 @@ func Openat(dirfd int, path string, flags int, mode uint32) (fd int, err error) 
 }
 
 //sys	readlinkat(dirfd int, path string, buf []byte) (n int, err error)
+//sys	readlink(path string, buf []byte) (n int, err error)
 
 func Readlink(path string, buf []byte) (n int, err error) {
-	return readlinkat(_AT_FDCWD, path, buf)
+	return readlink(path, buf)
 }
+
+//sys	rename(oldpath string, newpath string) (err error)
 
 func Rename(oldpath string, newpath string) (err error) {
-	return Renameat(_AT_FDCWD, oldpath, _AT_FDCWD, newpath)
+	return rename(oldpath, newpath)
 }
 
+//sys	rmdir(path string) (err error)
+
 func Rmdir(path string) error {
-	return unlinkat(_AT_FDCWD, path, _AT_REMOVEDIR)
+	return rmdir(path)
 }
 
 //sys	symlinkat(oldpath string, newdirfd int, newpath string) (err error)
+//sys	symlink(oldpath string, newpath string) (err error)
 
 func Symlink(oldpath string, newpath string) (err error) {
-	return symlinkat(oldpath, _AT_FDCWD, newpath)
+	return symlink(oldpath, newpath)
 }
 
 func Unlink(path string) error {
-	return unlinkat(_AT_FDCWD, path, 0)
+	return unlink(path)
 }
 
 //sys	unlinkat(dirfd int, path string, flags int) (err error)
+//sys	unlink(path string) (err error)
 
 func Unlinkat(dirfd int, path string) error {
 	return unlinkat(dirfd, path, 0)

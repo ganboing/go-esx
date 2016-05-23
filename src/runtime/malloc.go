@@ -305,8 +305,8 @@ func mallocinit() {
 		// This is necessary on Android L where we share a process
 		// with ART, which reserves virtual memory aggressively.
 		arenaSizes := []uintptr{
-			512 << 20,
-			256 << 20,
+			//512 << 20,
+			//256 << 20,
 			128 << 20,
 		}
 

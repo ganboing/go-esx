@@ -141,7 +141,8 @@ TEXT time·now(SB),NOSPLIT,$16
 	// We're guaranteed 128 bytes on entry, and we've taken 16, and the
 	// call uses another 8.
 	// That leaves 104 for the gettime code to use. Hope that's enough!
-	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
+	JMP	fallback
+//	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
 	CMPQ	AX, $0
 	JEQ	fallback
 	MOVL	$0, DI // CLOCK_REALTIME
@@ -155,8 +156,10 @@ TEXT time·now(SB),NOSPLIT,$16
 fallback:
 	LEAQ	0(SP), DI
 	MOVQ	$0, SI
-	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
-	CALL	AX
+//	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
+	MOVL	$96, AX
+//	CALL	AX
+	SYSCALL
 	MOVQ	0(SP), AX	// sec
 	MOVL	8(SP), DX	// usec
 	IMULQ	$1000, DX
@@ -167,7 +170,8 @@ fallback:
 TEXT runtime·nanotime(SB),NOSPLIT,$16
 	// Duplicate time.now here to avoid using up precious stack space.
 	// See comment above in time.now.
-	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
+	JMP	fallback
+//	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
 	CMPQ	AX, $0
 	JEQ	fallback
 	MOVL	$1, DI // CLOCK_MONOTONIC
@@ -184,8 +188,10 @@ TEXT runtime·nanotime(SB),NOSPLIT,$16
 fallback:
 	LEAQ	0(SP), DI
 	MOVQ	$0, SI
-	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
-	CALL	AX
+//	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
+	MOVL	$96, AX
+//	CALL	AX
+	SYSCALL
 	MOVQ	0(SP), AX	// sec
 	MOVL	8(SP), DX	// usec
 	IMULQ	$1000, DX

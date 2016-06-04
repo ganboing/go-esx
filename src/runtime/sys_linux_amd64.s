@@ -280,6 +280,20 @@ TEXT runtime·callCgoMmap(SB),NOSPLIT,$16
 	MOVQ	AX, ret+32(FP)
 	RET
 
+// Likewise
+// $16 to account for potentially not 16 byte aligned SP
+TEXT runtime·callCgoMmapReserve(SB),NOSPLIT,$16
+	MOVQ	addr+0(FP), DI
+	MOVQ	n+8(FP), SI
+	MOVQ	_cgo_mmap_reserve(SB), AX
+	MOVQ	SP, BX
+	ANDQ	$~15, SP
+	MOVQ	BX, 0(SP)
+	CALL	AX
+	MOVQ	0(SP), SP
+	MOVQ	AX, ret+16(FP)
+	RET
+
 TEXT runtime·munmap(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI

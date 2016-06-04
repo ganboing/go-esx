@@ -21,3 +21,10 @@ x_cgo_mmap(void *addr, uintptr_t length, int32_t prot, int32_t flags, int32_t fd
 	}
 	return p;
 }
+
+extern void* mmapfix_reserve(void* addr, uintptr_t length);
+
+void* x_cgo_mmap_reserve(void* addr, uintptr_t length) {
+
+	return mmapfix_reserve(addr, length);
+}

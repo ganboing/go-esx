@@ -64,6 +64,8 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 		nextfd int
 		i      int
 		p      [2]int
+		timeout Timeval
+		isESX  bool
 	)
 
 	// Record parent PID so child can test if it has died.
@@ -96,6 +98,7 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 	r1, _, err1 = RawSyscall(SYS_FORK, 0, 0, 0)
 	if err1 == 38 {
 	// use vfork on esx
+		isESX = true
 		r1, _, err1 = RawSyscall(SYS_VFORK, 0, 0, 0)
 	}
 	if err1 != 0 {
@@ -122,7 +125,10 @@ func forkAndExecInChild(argv0 *byte, argv, envv []*byte, chroot, dir *byte, attr
 	}
 
 	// Fork succeeded, now in child.
-
+	if isESX {
+		timeout = Timeval{1, 0}
+	}
+	RawSyscall6(SYS_SELECT, uintptr(0), uintptr(0), uintptr(0), uintptr(0), uintptr(unsafe.Pointer(&timeout)), uintptr(0))
 	// Wait for User ID/Group ID mappings to be written.
 	if sys.UidMappings != nil || sys.GidMappings != nil {
 		if _, _, err1 = RawSyscall(SYS_CLOSE, uintptr(p[1]), 0, 0); err1 != 0 {

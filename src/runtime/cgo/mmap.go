@@ -20,3 +20,9 @@ import _ "unsafe"
 //go:linkname _cgo_mmap _cgo_mmap
 var x_cgo_mmap byte
 var _cgo_mmap = &x_cgo_mmap
+
+//go:cgo_import_static x_cgo_mmap_reserve
+//go:linkname x_cgo_mmap_reserve x_cgo_mmap_reserve
+//go:linkname _cgo_mmap_reserve _cgo_mmap_reserve
+var x_cgo_mmap_reserve byte
+var _cgo_mmap_reserve = &x_cgo_mmap_reserve

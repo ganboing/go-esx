@@ -11,6 +11,8 @@ package cgo
 
 /*
 
+#cgo linux,amd64 CXXFLAGS: -fno-exceptions -std=c++0x -Wall
+#cgo linux,amd64 LDFLAGS: -ldl
 #cgo darwin,!arm,!arm64 LDFLAGS: -lpthread
 #cgo darwin,arm LDFLAGS: -framework CoreFoundation
 #cgo darwin,arm64 LDFLAGS: -framework CoreFoundation

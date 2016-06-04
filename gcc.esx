@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+set -x
+x86_64-vmk-linux-gnu-gcc --sysroot=${ESX_SYSROOT} $@

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+LIBNAME=$1
+LIBPATH=$2
+FUNC=$3
+PATCH_OFFSET=$4
+
+NM=x86_64-vmk-linux-gnu-nm
+
+err()
+{
+	echo "$@" 1>&2
+	exit 1
+}
+
+check_addr()
+{
+	echo "$1" | grep -q '^0x[0-9a-fA-F][0-9a-fA-F]*$'
+}
+
+FUNC_OFFSET="0x$(${NM} ${ESX_SYSROOT}/lib64/${LIBPATH} | grep " ${FUNC}\$" | awk '{print $1}')"
+
+check_addr $FUNC_OFFSET
+
+echo "unsigned int ${FUNC}_${LIBNAME}_patch_offset=$((${FUNC_OFFSET}+${PATCH_OFFSET}))ULL;"

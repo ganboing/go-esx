@@ -430,6 +430,7 @@ func schedinit() {
 	tracebackinit()
 	moduledataverify()
 	stackinit()
+	mmapreserveinit()
 	mallocinit()
 	mcommoninit(_g_.m)
 

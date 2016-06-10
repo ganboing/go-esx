@@ -7,6 +7,9 @@ if [ ! -f make.bash ]; then
 	exit 1
 fi
 
+export GOROOT_BOOTSTRAP="${GOROOT_BOOTSTRAP:-/usr/lib/go}"
+export GOOS=esx
+export GOARCH=amd64
 export CGO_ENABLED=1
 export CC_FOR_TARGET=$PWD/../gcc.esx
 export CXX_FOR_TARGET=$PWD/../g++.esx
@@ -21,7 +24,7 @@ libc libc-2.12.2.so mremap 3
 ld ld-2.12.2.so mmap 3
 ld ld-2.12.2.so munmap 0'
 
-OFFSET_H=$PWD/runtime/cgo/esx_mmap_wrapper.h
+OFFSET_H=$PWD/runtime/cgo/mmap_wrapper_esx_amd64.h
 rm ${OFFSET_H}
 
 while read line; do

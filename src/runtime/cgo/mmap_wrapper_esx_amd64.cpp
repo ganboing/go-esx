@@ -11,11 +11,11 @@
 #include <malloc.h>
 #include <sched.h>
 #include <errno.h>
-#include "esx_mmap_wrapper.h"
+#include "mmap_wrapper_esx_amd64.h"
 
 // +build cgo
 
-// +build linux,amd64
+// +build esx,amd64
 
 template<size_t n>
 void debug_output(const char (&str)[n])
@@ -209,6 +209,7 @@ extern "C" void* mmapfix_reserve(void* addr, size_t length){
 		return NULL;
 	mmap_reserved_low = (uintptr_t)addr;
 	mmap_reserved_high = (uintptr_t)addr + length;
+	fprintf(stderr, "mmapfix: reserved range %p-%p\n", (void*)mmap_reserved_low, (void*)mmap_reserved_high);
 	return addr;
 }
 #pragma GCC visibility pop
@@ -233,6 +234,7 @@ extern "C" long do_mmap_redir(void *addr, size_t length, int prot, int flags,
 				syscall_failed(raw_sys_mmap((void*)mmap_base, PAGE_SIZE, PROT_READ, 
 					MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED, 0, 0)))
 				crash("mmap/munmap failed");
+			addr = (void*)mmap_base;
 		}
 		else
 			break;

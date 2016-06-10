@@ -49,6 +49,7 @@ var headers = []struct {
 	{"freebsd", Hfreebsd},
 	{"linux", Hlinux},
 	{"android", Hlinux}, // must be after "linux" entry or else headstr(Hlinux) == "android"
+	{"esx", Hlinux},
 	{"nacl", Hnacl},
 	{"netbsd", Hnetbsd},
 	{"openbsd", Hopenbsd},

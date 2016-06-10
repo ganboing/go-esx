@@ -6,6 +6,7 @@ const TheGoos = `freebsd`
 
 const GoosAndroid = 0
 const GoosDarwin = 0
+const GoosEsx = 0
 const GoosDragonfly = 0
 const GoosFreebsd = 1
 const GoosLinux = 0

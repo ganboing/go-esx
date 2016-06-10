@@ -274,6 +274,7 @@ var cgoEnabled = map[string]bool{
 	"android/386":     true,
 	"android/amd64":   true,
 	"android/arm":     true,
+	"esx/amd64":       true,
 	"netbsd/386":      true,
 	"netbsd/amd64":    true,
 	"netbsd/arm":      true,
@@ -1409,6 +1410,9 @@ func (ctxt *Context) match(name string, allTags map[string]bool) bool {
 	if ctxt.GOOS == "android" && name == "linux" {
 		return true
 	}
+	if ctxt.GOOS == "esx" && name == "linux" {
+		return true
+	}
 
 	// other tags
 	for _, tag := range ctxt.BuildTags {
@@ -1471,6 +1475,9 @@ func (ctxt *Context) goodOSArchFile(name string, allTags map[string]bool) bool {
 		if ctxt.GOOS == "android" && l[n-2] == "linux" {
 			return true
 		}
+		if ctxt.GOOS == "esx" && l[n-2] == "linux" {
+			return true
+		}
 		return l[n-2] == ctxt.GOOS
 	}
 	if n >= 1 && knownOS[l[n-1]] {
@@ -1478,6 +1485,9 @@ func (ctxt *Context) goodOSArchFile(name string, allTags map[string]bool) bool {
 			allTags[l[n-1]] = true
 		}
 		if ctxt.GOOS == "android" && l[n-1] == "linux" {
+			return true
+		}
+		if ctxt.GOOS == "esx" && l[n-1] == "linux" {
 			return true
 		}
 		return l[n-1] == ctxt.GOOS

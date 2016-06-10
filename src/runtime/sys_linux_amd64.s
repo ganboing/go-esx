@@ -135,73 +135,6 @@ TEXT runtime·mincore(SB),NOSPLIT,$0-28
 	MOVL	AX, ret+24(FP)
 	RET
 
-// func now() (sec int64, nsec int32)
-TEXT time·now(SB),NOSPLIT,$16
-	// Be careful. We're calling a function with gcc calling convention here.
-	// We're guaranteed 128 bytes on entry, and we've taken 16, and the
-	// call uses another 8.
-	// That leaves 104 for the gettime code to use. Hope that's enough!
-	JMP	fallback
-//	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
-	CMPQ	AX, $0
-	JEQ	fallback
-	MOVL	$0, DI // CLOCK_REALTIME
-	LEAQ	0(SP), SI
-	CALL	AX
-	MOVQ	0(SP), AX	// sec
-	MOVQ	8(SP), DX	// nsec
-	MOVQ	AX, sec+0(FP)
-	MOVL	DX, nsec+8(FP)
-	RET
-fallback:
-	LEAQ	0(SP), DI
-	MOVQ	$0, SI
-//	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
-	MOVL	$96, AX
-//	CALL	AX
-	SYSCALL
-	MOVQ	0(SP), AX	// sec
-	MOVL	8(SP), DX	// usec
-	IMULQ	$1000, DX
-	MOVQ	AX, sec+0(FP)
-	MOVL	DX, nsec+8(FP)
-	RET
-
-TEXT runtime·nanotime(SB),NOSPLIT,$16
-	// Duplicate time.now here to avoid using up precious stack space.
-	// See comment above in time.now.
-	JMP	fallback
-//	MOVQ	runtime·__vdso_clock_gettime_sym(SB), AX
-	CMPQ	AX, $0
-	JEQ	fallback
-	MOVL	$1, DI // CLOCK_MONOTONIC
-	LEAQ	0(SP), SI
-	CALL	AX
-	MOVQ	0(SP), AX	// sec
-	MOVQ	8(SP), DX	// nsec
-	// sec is in AX, nsec in DX
-	// return nsec in AX
-	IMULQ	$1000000000, AX
-	ADDQ	DX, AX
-	MOVQ	AX, ret+0(FP)
-	RET
-fallback:
-	LEAQ	0(SP), DI
-	MOVQ	$0, SI
-//	MOVQ	runtime·__vdso_gettimeofday_sym(SB), AX
-	MOVL	$96, AX
-//	CALL	AX
-	SYSCALL
-	MOVQ	0(SP), AX	// sec
-	MOVL	8(SP), DX	// usec
-	IMULQ	$1000, DX
-	// sec is in AX, nsec in DX
-	// return nsec in AX
-	IMULQ	$1000000000, AX
-	ADDQ	DX, AX
-	MOVQ	AX, ret+0(FP)
-	RET
-
 TEXT runtime·rtsigprocmask(SB),NOSPLIT,$0-28
 	MOVL	sig+0(FP), DI
 	MOVQ	new+8(FP), SI
@@ -278,20 +211,6 @@ TEXT runtime·callCgoMmap(SB),NOSPLIT,$16
 	CALL	AX
 	MOVQ	0(SP), SP
 	MOVQ	AX, ret+32(FP)
-	RET
-
-// Likewise
-// $16 to account for potentially not 16 byte aligned SP
-TEXT runtime·callCgoMmapReserve(SB),NOSPLIT,$16
-	MOVQ	addr+0(FP), DI
-	MOVQ	n+8(FP), SI
-	MOVQ	_cgo_mmap_reserve(SB), AX
-	MOVQ	SP, BX
-	ANDQ	$~15, SP
-	MOVQ	BX, 0(SP)
-	CALL	AX
-	MOVQ	0(SP), SP
-	MOVQ	AX, ret+16(FP)
 	RET
 
 TEXT runtime·munmap(SB),NOSPLIT,$0

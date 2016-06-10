@@ -2,12 +2,15 @@
 
 // +build !android
 
+// +build !esx
+
 package sys
 
 const TheGoos = `linux`
 
 const GoosAndroid = 0
 const GoosDarwin = 0
+const GoosEsx = 0
 const GoosDragonfly = 0
 const GoosFreebsd = 0
 const GoosLinux = 1

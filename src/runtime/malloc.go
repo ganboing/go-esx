@@ -275,10 +275,8 @@ func mallocinit() {
 				p = uintptr(i)<<40 | uintptrMask&(0x00c0<<32)
 			}
 			pSize = bitmapSize + spansSize + arenaSize + _PageSize
-			/*p = uintptr(sysReserve(unsafe.Pointer(p), pSize, &reserved))*/
-			p = uintptr(mmap_reserve(unsafe.Pointer(p), pSize));
+			p = uintptr(sysReserve(unsafe.Pointer(p), pSize, &reserved))
 			if p != 0 {
-				reserved = true
 				break
 			}
 		}
@@ -307,8 +305,8 @@ func mallocinit() {
 		// This is necessary on Android L where we share a process
 		// with ART, which reserves virtual memory aggressively.
 		arenaSizes := []uintptr{
-			//512 << 20,
-			//256 << 20,
+			512 << 20,
+			256 << 20,
 			128 << 20,
 		}
 

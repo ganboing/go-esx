@@ -6,6 +6,7 @@ const TheGoos = `darwin`
 
 const GoosAndroid = 0
 const GoosDarwin = 1
+const GoosEsx = 0
 const GoosDragonfly = 0
 const GoosFreebsd = 0
 const GoosLinux = 0

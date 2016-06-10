@@ -1,8 +1,11 @@
 #!/bin/bash
 DIR=$(readlink -f $(dirname $0))
+export CGO_ENABLED=1
+export GOOS=esx
+export GOARCH=amd64
 export PATH=$PATH:${DIR}/esx_toolchain/usr/bin
 export ESX_SYSROOT=${DIR}/esx_sysroot
 export CC=${DIR}/gcc.esx
 export CXX=${DIR}/g++.esx
 export GOROOT=${DIR}
-go $@
+${GOROOT}/bin/go $@

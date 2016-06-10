@@ -73,6 +73,7 @@ var okgoos = []string{
 	"openbsd",
 	"plan9",
 	"windows",
+	"esx",
 }
 
 // find reports the first index of p in l[0:n], or else -1.
@@ -754,7 +755,7 @@ func matchtag(tag string) bool {
 		}
 		return !matchtag(tag[1:])
 	}
-	return tag == goos || tag == goarch || tag == "cmd_go_bootstrap" || tag == "go1.1" || (goos == "android" && tag == "linux")
+	return tag == goos || tag == goarch || tag == "cmd_go_bootstrap" || tag == "go1.1" || (goos == "android" && tag == "linux") || (goos == "esx" && tag == "linux")
 }
 
 // shouldbuild reports whether we should build this file.
@@ -769,7 +770,7 @@ func shouldbuild(file, dir string) bool {
 	name := filepath.Base(file)
 	excluded := func(list []string, ok string) bool {
 		for _, x := range list {
-			if x == ok {
+			if x == ok || (x == "linux" && ok == "esx" ) {
 				continue
 			}
 			i := strings.Index(name, x)
@@ -1083,6 +1084,7 @@ var cgoEnabled = map[string]bool{
 	"solaris/amd64":   true,
 	"windows/386":     true,
 	"windows/amd64":   true,
+	"esx/amd64":       true,
 }
 
 func needCC() bool {

@@ -16,6 +16,7 @@ const (
 	_MAP_ANON    = 0x20
 	_MAP_PRIVATE = 0x2
 	_MAP_FIXED   = 0x10
+	_MAP_NORESERVE = 0x4000
 
 	_MADV_DONTNEED   = 0x4
 	_MADV_HUGEPAGE   = 0xe
@@ -145,6 +146,7 @@ type epollevent struct {
 
 const (
 	_O_RDONLY  = 0x0
+	_O_CREAT   = 0x40
 	_O_CLOEXEC = 0x80000
 )
 

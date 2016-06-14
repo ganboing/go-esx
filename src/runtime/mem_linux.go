@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// +build !esx
+
 package runtime
 
 import (
@@ -176,24 +178,16 @@ func sysReserve(v unsafe.Pointer, n uintptr, reserved *bool) unsafe.Pointer {
 	// if we can reserve at least 64K and check the assumption in SysMap.
 	// Only user-mode Linux (UML) rejects these requests.
 	if sys.PtrSize == 8 && uint64(n) > 1<<32 {
-		if GOOS == "esx" {
-			v = mmap_reserve(v, n)
-			if v!=nil {
-				*reserved = true
+		p := mmap_fixed(v, 64<<10, _PROT_NONE, _MAP_ANON|_MAP_PRIVATE, -1, 0)
+		if p != v {
+			if uintptr(p) >= 4096 {
+				munmap(p, 64<<10)
 			}
-			return v
-		} else {
-			p := mmap_fixed(v, 64<<10, _PROT_NONE, _MAP_ANON|_MAP_PRIVATE, -1, 0)
-			if p != v {
-				if uintptr(p) >= 4096 {
-					munmap(p, 64<<10)
-				}
-				return nil
-			}
-			munmap(p, 64<<10)
-			*reserved = false
-			return v
+			return nil
 		}
+		munmap(p, 64<<10)
+		*reserved = false
+		return v
 	}
 
 	p := mmap(v, n, _PROT_NONE, _MAP_ANON|_MAP_PRIVATE, -1, 0)

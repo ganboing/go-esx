@@ -21,6 +21,7 @@ import "C"
 
 const (
 	O_RDONLY    = C.O_RDONLY
+	O_CREAT     = C.O_CREAT
 	O_CLOEXEC   = C.O_CLOEXEC
 	SA_RESTORER = C.SA_RESTORER
 )

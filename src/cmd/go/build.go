@@ -155,6 +155,13 @@ func init() {
 			// timeout tests that waiting to run.
 			buildP = 1
 		}
+	} else if buildContext.GOOS == "esx" {
+		switch buildContext.GOARCH {
+		case "amd64":
+			// we are not ready yet!
+			// waiting for forkexec bug to be fixed
+			buildP = 1
+		}
 	}
 }
 

@@ -5,7 +5,6 @@
 // Support for memory sanitizer.  See runtime/cgo/mmap.go.
 
 // +build linux,amd64
-// +build !esx,amd64
 
 package runtime
 
@@ -15,10 +14,6 @@ import "unsafe"
 // program, so it is only non-nil when using cgo.
 //go:linkname _cgo_mmap _cgo_mmap
 var _cgo_mmap unsafe.Pointer
-
-func mmap_reserve(addr unsafe.Pointer, n uintptr) unsafe.Pointer{
-	return nil
-}
 
 func mmap(addr unsafe.Pointer, n uintptr, prot, flags, fd int32, off uint32) unsafe.Pointer {
 	if _cgo_mmap != nil {

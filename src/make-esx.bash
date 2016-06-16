@@ -24,11 +24,11 @@ libc libc-2.12.2.so mremap 3
 ld ld-2.12.2.so mmap 3
 ld ld-2.12.2.so munmap 0'
 
-OFFSET_H=$PWD/runtime/cgo/mmap_wrapper_esx_amd64.h
-rm ${OFFSET_H}
+#OFFSET_H=$PWD/runtime/cgo/mmap_wrapper_esx_amd64.h
+#rm ${OFFSET_H}
 
-while read line; do
-	$PWD/esx-patch-gen $line >> ${OFFSET_H}
-done <<< "$patchlist"
+#while read line; do
+#	$PWD/esx-patch-gen $line >> ${OFFSET_H}
+#done <<< "$patchlist"
 
 $PWD/make.bash

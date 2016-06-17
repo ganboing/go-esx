@@ -2,4 +2,4 @@
 set -e
 set -x
 # use gcc instead of g++ for now
-x86_64-vmk-linux-gnu-g++ --sysroot=${ESX_SYSROOT} $@
+x86_64-vmk-linux-gnu-g++.real --sysroot=${ESX_SYSROOT} $@

@@ -2,8 +2,8 @@
 
 set -e
 
-if [ ! -f make.bash ]; then
-	echo 'make-esx.bash must be run from $GOROOT/src' 1>&2
+if [ ! -f bootstrap.bash ]; then
+	echo 'bootstrap-esx.bash must be run from $GOROOT/src' 1>&2
 	exit 1
 fi
 
@@ -19,4 +19,4 @@ export LD_FOR_TARGET=x86_64-vmk-linux-gnu-ld
 export ESX_SYSROOT=$ESX_TOOLS/esx_sysroot
 export PATH=$PATH:$ESX_TOOLS:$ESX_TOOLS/esx_toolchain/usr/bin
 
-$PWD/make.bash
+$PWD/bootstrap.bash
